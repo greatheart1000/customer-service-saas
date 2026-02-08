@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS saas_customer_service;
+SHOW DATABASES LIKE 'saas%';

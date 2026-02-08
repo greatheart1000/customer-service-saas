@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+ENV/
+env/
+
+# 环境变量文件（包含敏感信息）
+.env
+.env.local
+.env.*.local
+
+# 日志文件
+*.log
+backend.log
+frontend.log
+*.pid
+
+# 数据库
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 测试覆盖率
+.coverage
+htmlcov/
+.pytest_cache/
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+
+# 系统文件
+Thumbs.db
+.DS_Store
+
+# Docker
+docker-compose.override.yml

@@ -1,0 +1,42 @@
+# FastAPI 和服务器
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# 数据库
+sqlalchemy==2.0.23
+psycopg2-binary==2.9.9
+pymysql==1.1.0
+alembic==1.12.1
+
+# 认证和安全
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# Pydantic
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# 微信支付
+wechatpy==1.8.18
+
+# 支付宝
+alipay-sdk-python>=3.7.0
+
+# 二维码生成
+qrcode==7.4.2
+
+# 其他依赖
+python-dotenv==1.0.0
+httpx==0.25.2
+
+# 邮箱验证
+email-validator==2.1.0
+
+# Redis
+redis==5.0.1
+
+# 短信服务（可选）
+alibabacloud_dysmsapi20170525==3.0.0  # 阿里云SMS
+tencentcloud-sdk-python==3.0.1155     # 腾讯云SMS

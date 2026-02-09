@@ -4,6 +4,8 @@
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File
 from sqlalchemy.orm import Session
+import logging
+import uuid
 
 from app.api.v1.endpoints import deps
 from app.api.v1.endpoints.rbac import require_org_admin
@@ -21,7 +23,9 @@ from app.schemas.user import User
 from app.models.knowledge_base import KnowledgeBase as KnowledgeBaseModel, Document as DocumentModel
 from app.models.organization import Organization
 from app.models.user import User as UserModel
-import uuid
+
+# 配置日志
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -396,6 +400,8 @@ def delete_document(
     """
     删除文档
     """
+    logger.info(f"[知识库管理] 用户 {current_user.email} 尝试删除文档 - KB_ID: {kb_id}, Doc_ID: {doc_id}")
+
     org = get_current_org(current_user, db)
 
     # 验证知识库属于当前组织
@@ -405,10 +411,11 @@ def delete_document(
     ).first()
 
     if not kb:
+        logger.warning(f"[知识库管理] 删除文档失败：知识库不存在 - KB_ID: {kb_id}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Knowledge base not found"
-    )
+            detail=f"知识库不存在 (ID: {kb_id})"
+        )
 
     doc = db.query(DocumentModel).filter(
         DocumentModel.id == doc_id,
@@ -416,16 +423,25 @@ def delete_document(
     ).first()
 
     if not doc:
+        logger.warning(f"[知识库管理] 删除文档失败：文档不存在 - Doc_ID: {doc_id}")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Document not found"
+            detail=f"文档不存在 (ID: {doc_id})"
         )
+
+    # 记录删除前的文档信息
+    doc_info = {"id": doc.id, "title": doc.title, "status": doc.status}
+    logger.info(f"[知识库管理] 准备删除文档: {doc_info}")
 
     db.delete(doc)
     db.commit()
 
     # 更新知识库文档计数
-    kb.document_count -= 1
+    old_count = kb.document_count
+    kb.document_count = max(0, kb.document_count - 1)
     db.commit()
+
+    logger.info(f"[知识库管理] 成功删除文档 - Doc_ID: {doc_id}, Title: {doc.title}, "
+                f"知识库文档计数: {old_count} -> {kb.document_count}, 操作者: {current_user.email}")
 
     return None

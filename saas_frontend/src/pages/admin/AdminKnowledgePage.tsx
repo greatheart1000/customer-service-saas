@@ -223,59 +223,100 @@ const AdminKnowledgePage: React.FC = () => {
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-            知识库管理
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            管理组织的知识库和文档
-          </Typography>
-        </Box>
+      {/* 页面标题 */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#1a1a2e' }}>
+          知识库管理
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#6b7280' }}>
+          管理组织的知识库和文档
+        </Typography>
+      </Box>
+
+      {/* 操作栏 */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 3,
+          borderRadius: 4,
+          backgroundColor: '#ffffff',
+          border: '1px solid #e5e7eb',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: 600, color: '#1a1a2e' }}>
+          知识库列表
+        </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setCreateDialogOpen(true)}
-          sx={{ bgcolor: '#f093fb' }}
+          sx={{
+            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            borderRadius: 3,
+            fontWeight: 600,
+            textTransform: 'none',
+            px: 3,
+            boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+              boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+            },
+          }}
         >
           创建知识库
         </Button>
-      </Box>
-
-      {/* Tabs */}
-      <Paper elevation={0} sx={{ mb: 3, borderRadius: 3 }}>
-        <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)}>
-          <Tab label="知识库列表" />
-          <Tab label="文档管理" disabled={!selectedKB} />
-        </Tabs>
       </Paper>
 
       {kbError && (
-        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setKbError(null)}>
+        <Alert severity="error" sx={{ mb: 3, borderRadius: 3 }} onClose={() => setKbError(null)}>
           {kbError}
         </Alert>
       )}
 
+      {/* 知识库列表 */}
       {tabValue === 0 && (
         <>
           {kbLoading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
+              <CircularProgress sx={{ color: '#f093fb' }} />
             </Box>
           ) : knowledgeBases.length === 0 ? (
-            <Paper sx={{ p: 8, textAlign: 'center', borderRadius: 3 }}>
-              <LibraryBooks sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
-              <Typography variant="h6" color="text.secondary" gutterBottom>
+            <Paper
+              sx={{
+                p: 8,
+                textAlign: 'center',
+                borderRadius: 4,
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb',
+              }}
+            >
+              <LibraryBooks sx={{ fontSize: 64, color: '#9ca3af', mb: 2 }} />
+              <Typography variant="h6" sx={{ color: '#6b7280', mb: 1, fontWeight: 600 }}>
                 还没有知识库
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              <Typography variant="body2" sx={{ color: '#9ca3af', mb: 3 }}>
                 创建第一个知识库开始管理您的文档
               </Typography>
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => setCreateDialogOpen(true)}
-                sx={{ bgcolor: '#f093fb' }}
+                sx={{
+                  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                  borderRadius: 3,
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  px: 3,
+                  boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                    boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+                  },
+                }}
               >
                 创建知识库
               </Button>
@@ -288,10 +329,17 @@ const AdminKnowledgePage: React.FC = () => {
                     sx={{
                       height: '100%',
                       cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      '&:hover': { transform: 'translateY(-4px)', boxShadow: 4 },
-                      border: selectedKB?.id === kb.id ? 2 : 0,
-                      borderColor: '#f093fb',
+                      transition: 'all 0.3s ease',
+                      borderRadius: 4,
+                      border: '1px solid #e5e7eb',
+                      backgroundColor: '#ffffff',
+                      '&:hover': {
+                        transform: 'translateY(-4px)',
+                        boxShadow: '0 12px 24px rgba(0, 0, 0, 0.1)',
+                        borderColor: '#f093fb',
+                      },
+                      border: selectedKB?.id === kb.id ? 2 : 1,
+                      borderColor: selectedKB?.id === kb.id ? '#f093fb' : '#e5e7eb',
                     }}
                     onClick={() => {
                       setSelectedKB(kb);
@@ -301,30 +349,44 @@ const AdminKnowledgePage: React.FC = () => {
                   >
                     <CardContent>
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Avatar sx={{ bgcolor: '#f093fb', mr: 2 }}>
+                        <Avatar
+                          sx={{
+                            width: 48,
+                            height: 48,
+                            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                            mr: 2,
+                            boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+                          }}
+                        >
                           <LibraryBooks />
                         </Avatar>
                         <Box sx={{ flex: 1 }}>
-                          <Typography variant="h6" noWrap>
+                          <Typography variant="h6" noWrap sx={{ fontWeight: 600, color: '#1a1a2e' }}>
                             {kb.name}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
+                          <Typography variant="body2" sx={{ color: '#6b7280' }}>
                             {kb.document_count} 个文档
                           </Typography>
                         </Box>
                       </Box>
                       {kb.description && (
-                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        <Typography variant="body2" sx={{ color: '#6b7280', mb: 2, lineHeight: 1.5 }}>
                           {kb.description}
                         </Typography>
                       )}
                       <Chip
                         label={kb.is_active ? '活跃' : '停用'}
-                        color={kb.is_active ? 'success' : 'default'}
                         size="small"
+                        sx={{
+                          borderRadius: 2,
+                          backgroundColor: kb.is_active ? '#d1fae5' : '#f3f4f6',
+                          color: kb.is_active ? '#065f46' : '#6b7280',
+                          fontWeight: 500,
+                          fontSize: '0.75rem',
+                        }}
                       />
                     </CardContent>
-                    <CardActions>
+                    <CardActions sx={{ px: 2, pb: 2, pt: 0 }}>
                       <Button
                         size="small"
                         startIcon={<Article />}
@@ -334,17 +396,33 @@ const AdminKnowledgePage: React.FC = () => {
                           loadDocuments(kb.id);
                           setTabValue(1);
                         }}
+                        sx={{
+                          color: '#6b7280',
+                          fontWeight: 500,
+                          textTransform: 'none',
+                          '&:hover': {
+                            backgroundColor: '#f3f4f6',
+                            color: '#f093fb',
+                          },
+                        }}
                       >
                         查看文档
                       </Button>
                       <Button
                         size="small"
-                        color="error"
-                        startIcon={<Delete />}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleDeleteKB(kb.id);
                         }}
+                        sx={{
+                          color: '#ef4444',
+                          fontWeight: 500,
+                          textTransform: 'none',
+                          '&:hover': {
+                            backgroundColor: '#fee2e2',
+                          },
+                        }}
+                        startIcon={<Delete />}
                       >
                         删除
                       </Button>
@@ -357,14 +435,23 @@ const AdminKnowledgePage: React.FC = () => {
         </>
       )}
 
+      {/* 文档管理 */}
       {tabValue === 1 && selectedKB && (
-        <Paper sx={{ p: 3, borderRadius: 3 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            borderRadius: 4,
+            backgroundColor: '#ffffff',
+            border: '1px solid #e5e7eb',
+          }}
+        >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
             <Box>
-              <Typography variant="h6">
+              <Typography variant="h6" sx={{ fontWeight: 600, color: '#1a1a2e' }}>
                 {selectedKB.name} - 文档列表
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: '#6b7280' }}>
                 共 {documents.length} 个文档
               </Typography>
             </Box>
@@ -373,6 +460,18 @@ const AdminKnowledgePage: React.FC = () => {
                 variant="outlined"
                 startIcon={<Upload />}
                 component="label"
+                sx={{
+                  borderRadius: 3,
+                  fontWeight: 500,
+                  textTransform: 'none',
+                  borderColor: '#e5e7eb',
+                  color: '#6b7280',
+                  '&:hover': {
+                    borderColor: '#f093fb',
+                    backgroundColor: '#f3f4f6',
+                    color: '#f093fb',
+                  },
+                }}
               >
                 上传文件
                 <input
@@ -386,7 +485,18 @@ const AdminKnowledgePage: React.FC = () => {
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={() => setDocumentDialogOpen(true)}
-                sx={{ bgcolor: '#f093fb' }}
+                sx={{
+                  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                  borderRadius: 3,
+                  fontWeight: 600,
+                  textTransform: 'none',
+                  px: 3,
+                  boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                    boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+                  },
+                }}
               >
                 添加文档
               </Button>
@@ -395,41 +505,69 @@ const AdminKnowledgePage: React.FC = () => {
 
           {docLoading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-              <CircularProgress />
+              <CircularProgress sx={{ color: '#f093fb' }} />
             </Box>
           ) : documents.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 8 }}>
-              <Description sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
-              <Typography variant="body1" color="text.secondary">
+              <Description sx={{ fontSize: 48, color: '#9ca3af', mb: 2 }} />
+              <Typography variant="body1" sx={{ color: '#6b7280' }}>
                 还没有文档
               </Typography>
             </Box>
           ) : (
             <List>
-              {documents.map((doc) => (
-                <ListItem key={doc.id} divider>
+              {documents.map((doc, index) => (
+                <ListItem
+                  key={doc.id}
+                  divider
+                  sx={{
+                    backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
+                    borderRadius: 2,
+                    mb: 1,
+                    border: '1px solid #f3f4f6',
+                    '&:hover': {
+                      backgroundColor: '#f3f4f6',
+                    },
+                  }}
+                >
                   <ListItemIcon>
-                    <Description color="action" />
+                    <Description sx={{ color: '#6b7280' }} />
                   </ListItemIcon>
                   <ListItemText
-                    primary={doc.title}
+                    primary={
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#1a1a2e' }}>
+                        {doc.title}
+                      </Typography>
+                    }
                     secondary={
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
                         <Chip
                           label={doc.status}
                           size="small"
-                          color={
-                            doc.status === 'completed'
-                              ? 'success'
-                              : doc.status === 'processing'
-                              ? 'info'
-                              : doc.status === 'failed'
-                              ? 'error'
-                              : 'default'
-                          }
+                          sx={{
+                            borderRadius: 2,
+                            backgroundColor:
+                              doc.status === 'completed'
+                                ? '#d1fae5'
+                                : doc.status === 'processing'
+                                ? '#dbeafe'
+                                : doc.status === 'failed'
+                                ? '#fee2e2'
+                                : '#f3f4f6',
+                            color:
+                              doc.status === 'completed'
+                                ? '#065f46'
+                                : doc.status === 'processing'
+                                ? '#1e40af'
+                                : doc.status === 'failed'
+                                ? '#991b1b'
+                                : '#6b7280',
+                            fontWeight: 500,
+                            fontSize: '0.75rem',
+                          }}
                         />
                         {doc.file_type && (
-                          <Typography variant="caption" color="text.secondary">
+                          <Typography variant="caption" sx={{ color: '#9ca3af' }}>
                             {doc.file_type.toUpperCase()}
                           </Typography>
                         )}
@@ -440,8 +578,14 @@ const AdminKnowledgePage: React.FC = () => {
                     <IconButton
                       edge="end"
                       size="small"
-                      color="primary"
                       onClick={() => handleViewDocument(doc)}
+                      sx={{
+                        color: '#6b7280',
+                        '&:hover': {
+                          backgroundColor: '#f3f4f6',
+                          color: '#3b82f6',
+                        },
+                      }}
                     >
                       <Visibility fontSize="small" />
                     </IconButton>
@@ -449,14 +593,26 @@ const AdminKnowledgePage: React.FC = () => {
                       edge="end"
                       size="small"
                       onClick={() => handleEditDocument(doc)}
+                      sx={{
+                        color: '#6b7280',
+                        '&:hover': {
+                          backgroundColor: '#f3f4f6',
+                          color: '#f093fb',
+                        },
+                      }}
                     >
                       <Edit fontSize="small" />
                     </IconButton>
                     <IconButton
                       edge="end"
                       size="small"
-                      color="error"
                       onClick={() => handleDeleteDocument(doc.id)}
+                      sx={{
+                        color: '#ef4444',
+                        '&:hover': {
+                          backgroundColor: '#fee2e2',
+                        },
+                      }}
                     >
                       <Delete fontSize="small" />
                     </IconButton>
@@ -469,8 +625,19 @@ const AdminKnowledgePage: React.FC = () => {
       )}
 
       {/* 创建知识库对话框 */}
-      <Dialog open={createDialogOpen} onClose={() => setCreateDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>创建知识库</DialogTitle>
+      <Dialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+          },
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 600, color: '#1a1a2e' }}>创建知识库</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -479,7 +646,19 @@ const AdminKnowledgePage: React.FC = () => {
             fullWidth
             value={kbForm.name}
             onChange={(e) => setKbForm({ ...kbForm, name: e.target.value })}
-            sx={{ mb: 2 }}
+            sx={{
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+                backgroundColor: '#f9fafb',
+                '&:hover': {
+                  backgroundColor: '#f3f4f6',
+                },
+                '&.Mui-focused': {
+                  backgroundColor: '#ffffff',
+                },
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -489,23 +668,72 @@ const AdminKnowledgePage: React.FC = () => {
             rows={3}
             value={kbForm.description}
             onChange={(e) => setKbForm({ ...kbForm, description: e.target.value })}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+                backgroundColor: '#f9fafb',
+                '&:hover': {
+                  backgroundColor: '#f3f4f6',
+                },
+                '&.Mui-focused': {
+                  backgroundColor: '#ffffff',
+                },
+              },
+            }}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setCreateDialogOpen(false)}>取消</Button>
-          <Button onClick={handleCreateKB} variant="contained" sx={{ bgcolor: '#f093fb' }}>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <Button
+            onClick={() => setCreateDialogOpen(false)}
+            sx={{
+              color: '#6b7280',
+              fontWeight: 500,
+              textTransform: 'none',
+            }}
+          >
+            取消
+          </Button>
+          <Button
+            onClick={handleCreateKB}
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: 3,
+              fontWeight: 600,
+              textTransform: 'none',
+              px: 3,
+              boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+              },
+            }}
+          >
             创建
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* 添加/编辑文档对话框 */}
-      <Dialog open={documentDialogOpen} onClose={() => {
-        setDocumentDialogOpen(false);
-        setSelectedDoc(null);
-        setDocForm({ title: '', content: '' });
-      }} maxWidth="sm" fullWidth>
-        <DialogTitle>{selectedDoc ? '编辑文档' : '添加文档'}</DialogTitle>
+      <Dialog
+        open={documentDialogOpen}
+        onClose={() => {
+          setDocumentDialogOpen(false);
+          setSelectedDoc(null);
+          setDocForm({ title: '', content: '' });
+        }}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+          },
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 600, color: '#1a1a2e' }}>
+          {selectedDoc ? '编辑文档' : '添加文档'}
+        </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -514,7 +742,19 @@ const AdminKnowledgePage: React.FC = () => {
             fullWidth
             value={docForm.title}
             onChange={(e) => setDocForm({ ...docForm, title: e.target.value })}
-            sx={{ mb: 2 }}
+            sx={{
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+                backgroundColor: '#f9fafb',
+                '&:hover': {
+                  backgroundColor: '#f3f4f6',
+                },
+                '&.Mui-focused': {
+                  backgroundColor: '#ffffff',
+                },
+              },
+            }}
           />
           <TextField
             margin="dense"
@@ -524,18 +764,50 @@ const AdminKnowledgePage: React.FC = () => {
             rows={6}
             value={docForm.content}
             onChange={(e) => setDocForm({ ...docForm, content: e.target.value })}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+                backgroundColor: '#f9fafb',
+                '&:hover': {
+                  backgroundColor: '#f3f4f6',
+                },
+                '&.Mui-focused': {
+                  backgroundColor: '#ffffff',
+                },
+              },
+            }}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => {
-            setDocumentDialogOpen(false);
-            setSelectedDoc(null);
-            setDocForm({ title: '', content: '' });
-          }}>取消</Button>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <Button
+            onClick={() => {
+              setDocumentDialogOpen(false);
+              setSelectedDoc(null);
+              setDocForm({ title: '', content: '' });
+            }}
+            sx={{
+              color: '#6b7280',
+              fontWeight: 500,
+              textTransform: 'none',
+            }}
+          >
+            取消
+          </Button>
           <Button
             onClick={selectedDoc ? handleSaveDocument : handleCreateDocument}
             variant="contained"
-            sx={{ bgcolor: '#f093fb' }}
+            sx={{
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: 3,
+              fontWeight: 600,
+              textTransform: 'none',
+              px: 3,
+              boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+              },
+            }}
           >
             {selectedDoc ? '保存' : '添加'}
           </Button>
@@ -548,47 +820,76 @@ const AdminKnowledgePage: React.FC = () => {
         onClose={() => setViewDocumentDialogOpen(false)}
         maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+          },
+        }}
       >
-        <DialogTitle>{selectedDoc?.title}</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 600, color: '#1a1a2e' }}>{selectedDoc?.title}</DialogTitle>
         <DialogContent>
           {selectedDoc?.content ? (
-            <Paper sx={{ p: 3, bgcolor: 'grey.50' }}>
-              <Typography variant="body1" style={{ whiteSpace: 'pre-wrap' }}>
+            <Paper
+              sx={{
+                p: 3,
+                backgroundColor: '#f9fafb',
+                borderRadius: 3,
+                border: '1px solid #e5e7eb',
+              }}
+            >
+              <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: '#374151', lineHeight: 1.6 }}>
                 {selectedDoc.content}
               </Typography>
             </Paper>
           ) : (
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: '#6b7280' }}>
               此文档没有文本内容（可能是上传的文件）
             </Typography>
           )}
           <Box sx={{ mt: 2 }}>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{ color: '#9ca3af', display: 'block', mb: 0.5 }}>
               文档ID: {selectedDoc?.id}
             </Typography>
-            <br />
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{ color: '#9ca3af', display: 'block', mb: 0.5 }}>
               状态: {selectedDoc?.status}
             </Typography>
             {selectedDoc?.file_type && (
-              <>
-                <br />
-                <Typography variant="caption" color="text.secondary">
-                  文件类型: {selectedDoc.file_type}
-                </Typography>
-              </>
+              <Typography variant="caption" sx={{ color: '#9ca3af', display: 'block' }}>
+                文件类型: {selectedDoc.file_type}
+              </Typography>
             )}
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setViewDocumentDialogOpen(false)}>关闭</Button>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <Button
+            onClick={() => setViewDocumentDialogOpen(false)}
+            sx={{
+              color: '#6b7280',
+              fontWeight: 500,
+              textTransform: 'none',
+            }}
+          >
+            关闭
+          </Button>
           <Button
             onClick={() => {
               setViewDocumentDialogOpen(false);
               handleEditDocument(selectedDoc!);
             }}
             variant="contained"
-            sx={{ bgcolor: '#f093fb' }}
+            sx={{
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: 3,
+              fontWeight: 600,
+              textTransform: 'none',
+              px: 3,
+              boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+              },
+            }}
           >
             编辑
           </Button>

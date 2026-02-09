@@ -4,7 +4,7 @@ API v1 路由聚合
 from fastapi import APIRouter
 from app.api.v1.endpoints import (
     auth, organizations, subscriptions, payments, usage, auth_extended,
-    bots, conversations, chat, users, admin, knowledge
+    bots, conversations, chat, users, admin, knowledge, tenant
 )
 
 api_router = APIRouter()
@@ -33,6 +33,9 @@ api_router.include_router(conversations.router, prefix="/conversations", tags=["
 
 # 聊天相关路由（用户端核心功能）
 api_router.include_router(chat.router, prefix="/chat", tags=["聊天"])
+
+# 租户相关路由（基于UUID的多租户访问，用于终端用户）
+api_router.include_router(tenant.router, prefix="/tenant", tags=["租户"])
 
 # 知识库管理路由（管理端）
 api_router.include_router(knowledge.router, prefix="/admin/knowledge", tags=["管理端-知识库"])

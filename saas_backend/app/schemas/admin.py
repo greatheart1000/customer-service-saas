@@ -2,8 +2,9 @@
 管理端相关的 Pydantic Schemas
 """
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field, ConfigDict
+from app.schemas.user import User
 
 
 class DashboardStats(BaseModel):
@@ -20,7 +21,7 @@ class DashboardStats(BaseModel):
 
 class UserListResponse(BaseModel):
     """用户列表响应"""
-    items: list
+    items: List[User]
     total: int
     page: int
     page_size: int
@@ -31,6 +32,8 @@ class UserUpdateByAdmin(BaseModel):
     """管理员更新用户 Schema"""
     is_active: Optional[bool] = None
     is_verified: Optional[bool] = None
+    is_admin: Optional[bool] = None
+    is_org_admin: Optional[bool] = None
     username: Optional[str] = Field(None, min_length=1, max_length=100)
 
 

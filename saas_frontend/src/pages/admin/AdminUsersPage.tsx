@@ -1,5 +1,6 @@
 /**
- * 管理端 - 用户管理页面（使用真实API）
+ * 管理端 - 用户管理页面
+ * 优化后的UI设计
  */
 import React, { useState, useEffect } from 'react';
 import {
@@ -25,7 +26,6 @@ import {
   CircularProgress,
   Alert,
   InputAdornment,
-  Pagination,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -146,25 +146,33 @@ const AdminUsersPage: React.FC = () => {
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-            用户管理
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            管理系统中的所有用户
-          </Typography>
-        </Box>
+      {/* 页面标题 */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#1a1a2e' }}>
+          用户管理
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#6b7280' }}>
+          管理系统中的所有用户和权限
+        </Typography>
       </Box>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+        <Alert severity="error" sx={{ mb: 3, borderRadius: 3 }} onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
 
-      {/* Search and Filter */}
-      <Paper elevation={0} sx={{ p: 2, borderRadius: 3, mb: 3 }}>
+      {/* 搜索栏 */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 3,
+          borderRadius: 4,
+          backgroundColor: '#ffffff',
+          border: '1px solid #e5e7eb',
+        }}
+      >
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <TextField
             placeholder="搜索用户邮箱或用户名..."
@@ -172,72 +180,149 @@ const AdminUsersPage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            sx={{ flex: 1 }}
+            sx={{
+              flex: 1,
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+                backgroundColor: '#f9fafb',
+                '&:hover': {
+                  backgroundColor: '#f3f4f6',
+                },
+                '&.Mui-focused': {
+                  backgroundColor: '#ffffff',
+                },
+              },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon color="action" />
+                  <SearchIcon sx={{ color: '#9ca3af', fontSize: 20 }} />
                 </InputAdornment>
               ),
             }}
           />
-          <Button variant="contained" onClick={handleSearch} sx={{ bgcolor: '#f093fb' }}>
+          <Button
+            variant="contained"
+            onClick={handleSearch}
+            sx={{
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: 3,
+              fontWeight: 600,
+              textTransform: 'none',
+              px: 3,
+              boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+              },
+            }}
+          >
             搜索
           </Button>
         </Box>
       </Paper>
 
-      {/* Users Table */}
+      {/* 用户表格 */}
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-          <CircularProgress />
+          <CircularProgress sx={{ color: '#f093fb' }} />
         </Box>
       ) : users.length === 0 ? (
-        <Paper sx={{ p: 8, textAlign: 'center', borderRadius: 3 }}>
-          <Typography variant="h6" color="text.secondary" gutterBottom>
+        <Paper
+          sx={{
+            p: 8,
+            textAlign: 'center',
+            borderRadius: 4,
+            backgroundColor: '#ffffff',
+            border: '1px solid #e5e7eb',
+          }}
+        >
+          <Typography variant="h6" sx={{ color: '#6b7280', mb: 1 }}>
             暂无用户
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: '#9ca3af' }}>
             {searchQuery ? '没有找到匹配的用户' : '系统中还没有用户'}
           </Typography>
         </Paper>
       ) : (
-        <Paper elevation={0} sx={{ borderRadius: 3 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            borderRadius: 4,
+            backgroundColor: '#ffffff',
+            border: '1px solid #e5e7eb',
+            overflow: 'hidden',
+          }}
+        >
           <TableContainer>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>用户</TableCell>
-                  <TableCell>邮箱</TableCell>
-                  <TableCell>组织</TableCell>
-                  <TableCell>角色</TableCell>
-                  <TableCell>状态</TableCell>
-                  <TableCell>注册时间</TableCell>
-                  <TableCell align="right">操作</TableCell>
+                <TableRow sx={{ backgroundColor: '#f9fafb' }}>
+                  <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                    用户
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                    邮箱
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                    组织
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                    角色
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                    状态
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                    注册时间
+                  </TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                    操作
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id} hover>
+                {users.map((user, index) => (
+                  <TableRow
+                    key={user.id}
+                    hover
+                    sx={{
+                      backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
+                      '&:hover': {
+                        backgroundColor: '#f3f4f6 !important',
+                      },
+                    }}
+                  >
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Avatar
                           src={user.avatar_url}
-                          sx={{ width: 40, height: 40 }}
+                          sx={{
+                            width: 40,
+                            height: 40,
+                            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                            fontWeight: 600,
+                            fontSize: '0.9rem',
+                          }}
                         >
                           {user.username ? user.username[0].toUpperCase() : user.email[0].toUpperCase()}
                         </Avatar>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#1a1a2e' }}>
                           {user.username || '未设置'}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{user.email}</TableCell>
+                    <TableCell sx={{ color: '#6b7280' }}>{user.email}</TableCell>
                     <TableCell>
                       {user.organization ? (
-                        <Chip label={user.organization.name} size="small" variant="outlined" />
+                        <Chip
+                          label={user.organization.name}
+                          size="small"
+                          variant="outlined"
+                          sx={{ borderRadius: 2, borderColor: '#e5e7eb', color: '#6b7280' }}
+                        />
                       ) : (
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" sx={{ color: '#9ca3af' }}>
                           -
                         </Typography>
                       )}
@@ -246,51 +331,96 @@ const AdminUsersPage: React.FC = () => {
                       <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
                         {user.is_admin && (
                           <Chip
-                            icon={<Security fontSize="small" />}
+                            icon={<Security fontSize="small" sx={{ ml: 0.5 }} />}
                             label="平台管理员"
                             size="small"
-                            color="secondary"
+                            sx={{
+                              borderRadius: 2,
+                              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                              color: 'white',
+                              fontWeight: 500,
+                              fontSize: '0.75rem',
+                            }}
                           />
                         )}
                         {user.is_org_admin && !user.is_admin && (
                           <Chip
-                            icon={<Security fontSize="small" />}
+                            icon={<Security fontSize="small" sx={{ ml: 0.5 }} />}
                             label="组织管理员"
                             size="small"
-                            color="info"
+                            sx={{
+                              borderRadius: 2,
+                              backgroundColor: '#dbeafe',
+                              color: '#1e40af',
+                              fontWeight: 500,
+                              fontSize: '0.75rem',
+                            }}
                           />
                         )}
                         {!user.is_admin && !user.is_org_admin && (
-                          <Chip label="普通用户" size="small" />
+                          <Chip
+                            label="普通用户"
+                            size="small"
+                            sx={{
+                              borderRadius: 2,
+                              backgroundColor: '#f3f4f6',
+                              color: '#6b7280',
+                              fontWeight: 500,
+                              fontSize: '0.75rem',
+                            }}
+                          />
                         )}
                       </Box>
                     </TableCell>
                     <TableCell>
                       <Chip
-                        icon={user.is_active ? <CheckCircle fontSize="small" /> : <Block fontSize="small" />}
+                        icon={user.is_active ? <CheckCircle fontSize="small" sx={{ ml: 0.5 }} /> : <Block fontSize="small" sx={{ ml: 0.5 }} />}
                         label={user.is_active ? '活跃' : '禁用'}
                         size="small"
-                        color={user.is_active ? 'success' : 'default'}
-                        sx={{ fontWeight: 500 }}
                         onClick={() => handleToggleStatus(user)}
-                        style={{ cursor: 'pointer' }}
+                        sx={{
+                          borderRadius: 2,
+                          cursor: 'pointer',
+                          backgroundColor: user.is_active ? '#d1fae5' : '#fee2e2',
+                          color: user.is_active ? '#065f46' : '#991b1b',
+                          fontWeight: 500,
+                          fontSize: '0.75rem',
+                          '&:hover': {
+                            backgroundColor: user.is_active ? '#a7f3d0' : '#fecaca',
+                          },
+                        }}
                       />
                     </TableCell>
-                    <TableCell>{formatDate(user.created_at)}</TableCell>
+                    <TableCell sx={{ color: '#6b7280' }}>{formatDate(user.created_at)}</TableCell>
                     <TableCell align="right">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleEditUser(user)}
-                      >
-                        <Edit fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={() => handleDeleteUser(user.id, user.email)}
-                      >
-                        <Delete fontSize="small" />
-                      </IconButton>
+                      <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'flex-end' }}>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleEditUser(user)}
+                          sx={{
+                            color: '#6b7280',
+                            '&:hover': {
+                              backgroundColor: '#f3f4f6',
+                              color: '#f093fb',
+                            },
+                          }}
+                        >
+                          <Edit fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => handleDeleteUser(user.id, user.email)}
+                          sx={{
+                            color: '#ef4444',
+                            '&:hover': {
+                              backgroundColor: '#fee2e2',
+                            },
+                          }}
+                        >
+                          <Delete fontSize="small" />
+                        </IconButton>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -300,21 +430,24 @@ const AdminUsersPage: React.FC = () => {
         </Paper>
       )}
 
-      {/* 分页 */}
-      {total > pageSize && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-          <Pagination
-            count={Math.ceil(total / pageSize)}
-            page={page}
-            onChange={(_, newPage) => setPage(newPage)}
-            color="primary"
-          />
-        </Box>
-      )}
-
       {/* 编辑用户对话框 */}
-      <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>编辑用户</DialogTitle>
+      <Dialog
+        open={editDialogOpen}
+        onClose={() => {
+          setEditDialogOpen(false);
+          setSelectedUser(null);
+          setEditForm({});
+        }}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+          }
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 600, color: '#1a1a2e' }}>编辑用户</DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
@@ -322,41 +455,103 @@ const AdminUsersPage: React.FC = () => {
             fullWidth
             value={editForm.username || ''}
             onChange={(e) => setEditForm({ ...editForm, username: e.target.value })}
-            sx={{ mb: 2 }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 3,
+                backgroundColor: '#f9fafb',
+                '&:hover': {
+                  backgroundColor: '#f3f4f6',
+                },
+                '&.Mui-focused': {
+                  backgroundColor: '#ffffff',
+                },
+              },
+            }}
           />
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography>账户状态</Typography>
+              <Typography sx={{ color: '#374151', fontWeight: 500 }}>账户状态</Typography>
               <Chip
                 label={editForm.is_active ? '活跃' : '禁用'}
-                color={editForm.is_active ? 'success' : 'default'}
                 onClick={() => setEditForm({ ...editForm, is_active: !editForm.is_active })}
-                sx={{ cursor: 'pointer' }}
+                sx={{
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  backgroundColor: editForm.is_active ? '#d1fae5' : '#fee2e2',
+                  color: editForm.is_active ? '#065f46' : '#991b1b',
+                  fontWeight: 500,
+                  '&:hover': {
+                    backgroundColor: editForm.is_active ? '#a7f3d0' : '#fecaca',
+                  },
+                }}
               />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography>平台管理员</Typography>
+              <Typography sx={{ color: '#374151', fontWeight: 500 }}>平台管理员</Typography>
               <Chip
                 label={editForm.is_admin ? '是' : '否'}
-                color={editForm.is_admin ? 'secondary' : 'default'}
                 onClick={() => setEditForm({ ...editForm, is_admin: !editForm.is_admin })}
-                sx={{ cursor: 'pointer' }}
+                sx={{
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  backgroundColor: editForm.is_admin ? '#dbeafe' : '#f3f4f6',
+                  color: editForm.is_admin ? '#1e40af' : '#6b7280',
+                  fontWeight: 500,
+                  '&:hover': {
+                    backgroundColor: editForm.is_admin ? '#bfdbfe' : '#e5e7eb',
+                  },
+                }}
               />
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography>组织管理员</Typography>
+              <Typography sx={{ color: '#374151', fontWeight: 500 }}>组织管理员</Typography>
               <Chip
                 label={editForm.is_org_admin ? '是' : '否'}
-                color={editForm.is_org_admin ? 'info' : 'default'}
                 onClick={() => setEditForm({ ...editForm, is_org_admin: !editForm.is_org_admin })}
-                sx={{ cursor: 'pointer' }}
+                sx={{
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  backgroundColor: editForm.is_org_admin ? '#dbeafe' : '#f3f4f6',
+                  color: editForm.is_org_admin ? '#1e40af' : '#6b7280',
+                  fontWeight: 500,
+                  '&:hover': {
+                    backgroundColor: editForm.is_org_admin ? '#bfdbfe' : '#e5e7eb',
+                  },
+                }}
               />
             </Box>
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditDialogOpen(false)}>取消</Button>
-          <Button onClick={handleSaveEdit} variant="contained" sx={{ bgcolor: '#f093fb' }}>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <Button
+            onClick={() => {
+              setEditDialogOpen(false);
+              setSelectedUser(null);
+              setEditForm({});
+            }}
+            sx={{
+              color: '#6b7280',
+              fontWeight: 500,
+              textTransform: 'none',
+            }}
+          >
+            取消
+          </Button>
+          <Button
+            onClick={handleSaveEdit}
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: 3,
+              fontWeight: 600,
+              textTransform: 'none',
+              boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+              },
+            }}
+          >
             保存
           </Button>
         </DialogActions>

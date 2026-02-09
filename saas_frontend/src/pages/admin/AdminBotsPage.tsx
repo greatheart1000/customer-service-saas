@@ -70,24 +70,53 @@ const AdminBotsPage: React.FC = () => {
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box>
-          <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-            机器人管理
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            管理系统中的所有 AI 机器人
-          </Typography>
-        </Box>
+      {/* 页面标题 */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#1a1a2e' }}>
+          机器人管理
+        </Typography>
+        <Typography variant="body2" sx={{ color: '#6b7280' }}>
+          管理系统中的所有 AI 机器人
+        </Typography>
+      </Box>
+
+      {/* 操作栏 */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 3,
+          borderRadius: 4,
+          backgroundColor: '#ffffff',
+          border: '1px solid #e5e7eb',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: 600, color: '#1a1a2e' }}>
+          机器人列表
+        </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setCreateDialogOpen(true)}
-          sx={{ bgcolor: '#f093fb' }}
+          sx={{
+            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            borderRadius: 3,
+            fontWeight: 600,
+            textTransform: 'none',
+            px: 3,
+            boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+              boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+            },
+          }}
         >
           创建机器人
         </Button>
-      </Box>
+      </Paper>
 
       {/* Bots Grid */}
       <Grid container spacing={3}>
@@ -96,14 +125,17 @@ const AdminBotsPage: React.FC = () => {
             <Card
               elevation={0}
               sx={{
-                borderRadius: 3,
+                borderRadius: 4,
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                transition: 'transform 0.2s',
+                transition: 'all 0.3s ease',
+                border: '1px solid #e5e7eb',
+                backgroundColor: '#ffffff',
                 '&:hover': {
                   transform: 'translateY(-4px)',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
+                  boxShadow: '0 12px 24px rgba(0, 0, 0, 0.1)',
+                  borderColor: '#f093fb',
                 },
               }}
             >
@@ -113,39 +145,79 @@ const AdminBotsPage: React.FC = () => {
                     sx={{
                       width: 56,
                       height: 56,
-                      bgcolor: bot.status === 'active' ? '#4facfe' : 'text.disabled',
+                      background: bot.status === 'active'
+                        ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                        : '#f3f4f6',
+                      color: bot.status === 'active' ? 'white' : '#6b7280',
+                      boxShadow: bot.status === 'active'
+                        ? '0 4px 12px rgba(240, 147, 251, 0.3)'
+                        : 'none',
                     }}
                   >
                     <SmartToy />
                   </Avatar>
                   <Box sx={{ flex: 1 }}>
-                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5, color: '#1a1a2e' }}>
                       {bot.name}
                     </Typography>
-                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
                       <Chip
-                        icon={bot.status === 'active' ? <CheckCircle /> : <Block />}
+                        icon={bot.status === 'active' ? <CheckCircle sx={{ ml: 0.5 }} /> : <Block sx={{ ml: 0.5 }} />}
                         label={bot.status === 'active' ? '运行中' : '已停用'}
                         size="small"
-                        color={bot.status === 'active' ? 'success' : 'default'}
+                        sx={{
+                          borderRadius: 2,
+                          backgroundColor: bot.status === 'active' ? '#d1fae5' : '#f3f4f6',
+                          color: bot.status === 'active' ? '#065f46' : '#6b7280',
+                          fontWeight: 500,
+                          fontSize: '0.75rem',
+                        }}
                       />
-                      <Chip label={bot.organization} size="small" variant="outlined" />
+                      <Chip
+                        label={bot.organization}
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                          borderRadius: 2,
+                          borderColor: '#e5e7eb',
+                          color: '#6b7280',
+                          fontWeight: 500,
+                          fontSize: '0.75rem',
+                        }}
+                      />
                     </Box>
                   </Box>
                 </Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                <Typography variant="body2" sx={{ color: '#6b7280', mb: 2, lineHeight: 1.5 }}>
                   {bot.description}
                 </Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" sx={{ color: '#9ca3af', fontWeight: 500 }}>
                   {bot.conversations.toLocaleString()} 次对话
                 </Typography>
               </CardContent>
-              <CardActions sx={{ justifyContent: 'flex-end', gap: 1 }}>
-                <IconButton size="small">
-                  <Edit />
+              <CardActions sx={{ justifyContent: 'flex-end', gap: 0.5, px: 2, pb: 2 }}>
+                <IconButton
+                  size="small"
+                  sx={{
+                    color: '#6b7280',
+                    '&:hover': {
+                      backgroundColor: '#f3f4f6',
+                      color: '#f093fb',
+                    },
+                  }}
+                >
+                  <Edit fontSize="small" />
                 </IconButton>
-                <IconButton size="small" color="error">
-                  <Delete />
+                <IconButton
+                  size="small"
+                  sx={{
+                    color: '#ef4444',
+                    '&:hover': {
+                      backgroundColor: '#fee2e2',
+                    },
+                  }}
+                >
+                  <Delete fontSize="small" />
                 </IconButton>
               </CardActions>
             </Card>
@@ -159,15 +231,32 @@ const AdminBotsPage: React.FC = () => {
         onClose={() => setCreateDialogOpen(false)}
         maxWidth="sm"
         fullWidth
-        PaperProps={{ sx: { borderRadius: 3 } }}
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+          },
+        }}
       >
-        <DialogTitle>创建新机器人</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 600, color: '#1a1a2e' }}>创建新机器人</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
             <TextField
               label="机器人名称"
               fullWidth
               placeholder="例如：客服助手"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 3,
+                  backgroundColor: '#f9fafb',
+                  '&:hover': {
+                    backgroundColor: '#f3f4f6',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: '#ffffff',
+                  },
+                },
+              }}
             />
             <TextField
               label="描述"
@@ -175,11 +264,35 @@ const AdminBotsPage: React.FC = () => {
               multiline
               rows={3}
               placeholder="机器人的主要功能..."
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 3,
+                  backgroundColor: '#f9fafb',
+                  '&:hover': {
+                    backgroundColor: '#f3f4f6',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: '#ffffff',
+                  },
+                },
+              }}
             />
             <TextField
               label="Coze Bot ID"
               fullWidth
               placeholder="从 Coze 平台获取"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 3,
+                  backgroundColor: '#f9fafb',
+                  '&:hover': {
+                    backgroundColor: '#f3f4f6',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: '#ffffff',
+                  },
+                },
+              }}
             />
             <TextField
               label="欢迎消息"
@@ -187,12 +300,47 @@ const AdminBotsPage: React.FC = () => {
               multiline
               rows={2}
               placeholder="用户首次对话时的欢迎语..."
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 3,
+                  backgroundColor: '#f9fafb',
+                  '&:hover': {
+                    backgroundColor: '#f3f4f6',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: '#ffffff',
+                  },
+                },
+              }}
             />
           </Box>
         </DialogContent>
-        <DialogActions sx={{ p: 3 }}>
-          <Button onClick={() => setCreateDialogOpen(false)}>取消</Button>
-          <Button variant="contained" sx={{ bgcolor: '#f093fb' }}>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <Button
+            onClick={() => setCreateDialogOpen(false)}
+            sx={{
+              color: '#6b7280',
+              fontWeight: 500,
+              textTransform: 'none',
+            }}
+          >
+            取消
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              borderRadius: 3,
+              fontWeight: 600,
+              textTransform: 'none',
+              px: 3,
+              boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #f5576c 0%, #f093fb 100%)',
+                boxShadow: '0 6px 16px rgba(240, 147, 251, 0.4)',
+              },
+            }}
+          >
             创建
           </Button>
         </DialogActions>

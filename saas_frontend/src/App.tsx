@@ -23,6 +23,17 @@ import AdminBotsPage from './pages/admin/AdminBotsPage';
 import AdminKnowledgePage from './pages/admin/AdminKnowledgePage';
 import AdminConversationsPage from './pages/admin/AdminConversationsPage';
 
+// Embedded Pages (嵌入式/租户端)
+import TenantChatPage from './pages/embedded/TenantChatPage';
+
+// Agent Pages (客服工作台)
+import AgentLayout from './components/AgentLayout';
+import AgentInboxPage from './pages/agent/AgentInboxPage';
+import AgentHistoryPage from './pages/agent/AgentHistoryPage';
+import AgentUsersPage from './pages/agent/AgentUsersPage';
+import AgentStatsPage from './pages/agent/AgentStatsPage';
+import AgentSettingsPage from './pages/agent/AgentSettingsPage';
+
 // Legacy Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
 import BillingPage from './pages/billing/BillingPage';
@@ -36,6 +47,27 @@ function App() {
           {/* 公开路由 */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+
+          {/* 租户嵌入式聊天路由 (无需认证) */}
+          <Route path="/tenant/:tenantUuid/chat" element={<TenantChatPage />} />
+
+          {/* 客服工作台路由 (需要认证) */}
+          <Route
+            path="/agent"
+            element={
+              <PrivateRoute>
+                <AgentLayout />
+              </PrivateRoute>
+            }
+          >
+            <Route index element={<Navigate to="/agent/inbox" replace />} />
+            <Route path="inbox" element={<AgentInboxPage />} />
+            <Route path="history" element={<AgentHistoryPage />} />
+            <Route path="users" element={<AgentUsersPage />} />
+            <Route path="stats" element={<AgentStatsPage />} />
+            <Route path="settings" element={<AgentSettingsPage />} />
+            <Route path="bots" element={<div>机器人管理 - 开发中</div>} />
+          </Route>
 
           {/* 用户端路由 (根路径) */}
           <Route

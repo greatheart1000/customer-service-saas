@@ -78,28 +78,32 @@ const mockStats: StatCard[] = [
 const AdminDashboardPage: React.FC = () => {
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
+      {/* 页面标题 */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#1a1a2e' }}>
           仪表板
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ color: '#6b7280' }}>
           欢迎回来，管理员！这是系统概览。
         </Typography>
       </Box>
 
-      {/* Stats Grid */}
+      {/* 统计卡片网格 */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {mockStats.map((stat) => (
           <Grid item xs={12} sm={6} md={4} key={stat.title}>
             <Card
               elevation={0}
               sx={{
-                borderRadius: 3,
+                borderRadius: 4,
                 height: '100%',
-                transition: 'transform 0.2s',
+                transition: 'all 0.3s ease',
+                border: '1px solid #e5e7eb',
+                backgroundColor: '#ffffff',
                 '&:hover': {
                   transform: 'translateY(-4px)',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
+                  boxShadow: '0 12px 24px rgba(0, 0, 0, 0.1)',
+                  borderColor: stat.color,
                 },
               }}
             >
@@ -108,18 +112,17 @@ const AdminDashboardPage: React.FC = () => {
                   <Box>
                     <Typography
                       variant="body2"
-                      color="text.secondary"
-                      sx={{ mb: 1, fontWeight: 500 }}
+                      sx={{ mb: 1, fontWeight: 500, color: '#6b7280' }}
                     >
                       {stat.title}
                     </Typography>
-                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 0.5 }}>
+                    <Typography variant="h4" sx={{ fontWeight: 700, mb: 0.5, color: '#1a1a2e' }}>
                       {stat.value}
                     </Typography>
                     <Typography
                       variant="caption"
                       sx={{
-                        color: stat.change.startsWith('+') ? 'success.main' : 'error.main',
+                        color: stat.change.startsWith('+') ? '#10b981' : '#ef4444',
                         fontWeight: 600,
                       }}
                     >
@@ -130,8 +133,9 @@ const AdminDashboardPage: React.FC = () => {
                     sx={{
                       width: 56,
                       height: 56,
-                      bgcolor: `${stat.color}20`,
+                      background: `linear-gradient(135deg, ${stat.color}40 0%, ${stat.color}20 100%)`,
                       color: stat.color,
+                      boxShadow: `0 4px 12px ${stat.color}40`,
                     }}
                   >
                     {stat.icon}
@@ -143,11 +147,20 @@ const AdminDashboardPage: React.FC = () => {
         ))}
       </Grid>
 
-      {/* Charts and Lists */}
+      {/* 图表和列表 */}
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <Paper elevation={0} sx={{ p: 3, borderRadius: 3, height: 400 }}>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              height: 400,
+              backgroundColor: '#ffffff',
+              border: '1px solid #e5e7eb',
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#1a1a2e' }}>
               用户增长趋势
             </Typography>
             <Box
@@ -156,7 +169,10 @@ const AdminDashboardPage: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'text.secondary',
+                color: '#9ca3af',
+                borderRadius: 3,
+                backgroundColor: '#f9fafb',
+                border: '1px dashed #e5e7eb',
               }}
             >
               图表占位符 - 需要集成图表库（如 Recharts）
@@ -165,8 +181,17 @@ const AdminDashboardPage: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Paper elevation={0} sx={{ p: 3, borderRadius: 3, height: 400 }}>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: 4,
+              height: 400,
+              backgroundColor: '#ffffff',
+              border: '1px solid #e5e7eb',
+            }}
+          >
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: '#1a1a2e' }}>
               最近活动
             </Typography>
             <Box
@@ -186,12 +211,14 @@ const AdminDashboardPage: React.FC = () => {
                   key={index}
                   sx={{
                     py: 2,
-                    borderBottom: '1px solid',
-                    borderColor: 'divider',
+                    borderBottom: '1px solid #f3f4f6',
+                    '&:last-child': { borderBottom: 'none' },
                   }}
                 >
-                  <Typography variant="body2">{activity}</Typography>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="body2" sx={{ color: '#374151', fontWeight: 500 }}>
+                    {activity}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: '#9ca3af' }}>
                     {index + 1} 小时前
                   </Typography>
                 </Box>

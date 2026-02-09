@@ -242,7 +242,7 @@ const AdminLayout: React.FC = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: 'background.default' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f5f7fa' }}>
       {/* AppBar */}
       <AppBar
         position="fixed"
@@ -250,46 +250,56 @@ const AdminLayout: React.FC = () => {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-          backdropFilter: 'blur(10px)',
+          background: '#ffffff',
+          borderBottom: '1px solid #e5e7eb',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
         }}
       >
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Toolbar sx={{ justifyContent: 'space-between', height: 64 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
+              sx={{ mr: 2, display: { sm: 'none' }, color: '#1a1a2e' }}
             >
               <MenuIcon />
             </IconButton>
-            <Fade in timeout={500}>
-              <Typography
-                variant="h5"
-                sx={{
-                  fontWeight: 700,
-                  color: 'white',
-                  letterSpacing: '-0.02em',
-                }}
-              >
-                智能客服 - 管理控制台
+            <Typography
+              variant="h5"
+              sx={{
+                fontWeight: 700,
+                color: '#1a1a2e',
+                letterSpacing: '-0.02em',
+                fontSize: '1.5rem',
+              }}
+            >
+                智能客服管理平台
               </Typography>
-            </Fade>
           </Box>
 
           {/* Right Actions */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Tooltip title="通知">
-              <IconButton color="inherit" sx={{ position: 'relative' }}>
+              <IconButton
+                sx={{
+                  color: '#6b7280',
+                  width: 40,
+                  height: 40,
+                  '&:hover': { backgroundColor: '#f3f4f6' }
+                }}
+              >
                 <Badge
                   badgeContent={5}
                   color="error"
                   sx={{
                     '& .MuiBadge-badge': {
-                      background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)',
+                      background: '#ef4444',
                       fontWeight: 600,
+                      fontSize: '10px',
+                      height: 16,
+                      minWidth: 16,
                     },
                   }}
                 >
@@ -298,16 +308,23 @@ const AdminLayout: React.FC = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title="账户">
-              <IconButton color="inherit" onClick={handleMenu}>
+              <IconButton
+                onClick={handleMenu}
+                sx={{
+                  color: '#6b7280',
+                  width: 40,
+                  height: 40,
+                  '&:hover': { backgroundColor: '#f3f4f6' }
+                }}
+              >
                 <Avatar
                   sx={{
-                    width: 36,
-                    height: 36,
-                    background: 'rgba(255, 255, 255, 0.2)',
-                    border: '2px solid rgba(255, 255, 255, 0.3)',
+                    width: 32,
+                    height: 32,
+                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
                   }}
                 >
-                  <AccountCircleIcon />
+                  A
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -322,18 +339,19 @@ const AdminLayout: React.FC = () => {
                 sx: {
                   mt: 1.5,
                   minWidth: 200,
-                  borderRadius: 2,
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                  borderRadius: 3,
+                  boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)',
+                  border: '1px solid #e5e7eb',
                 },
               }}
             >
-              <MenuItem onClick={() => navigate('/admin/settings')}>
-                <SettingsIcon sx={{ mr: 1, fontSize: 20 }} />
+              <MenuItem onClick={() => navigate('/admin/settings')} sx={{ fontSize: '0.9rem' }}>
+                <SettingsIcon sx={{ mr: 1.5, fontSize: 20, color: '#6b7280' }} />
                 系统设置
               </MenuItem>
               <Divider />
-              <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
-                <LogoutIcon sx={{ mr: 1, fontSize: 20 }} />
+              <MenuItem onClick={handleLogout} sx={{ color: '#ef4444', fontSize: '0.9rem' }}>
+                <LogoutIcon sx={{ mr: 1.5, fontSize: 20 }} />
                 退出登录
               </MenuItem>
             </Menu>
@@ -375,8 +393,8 @@ const AdminLayout: React.FC = () => {
               boxSizing: 'border-box',
               width: drawerWidth,
               border: 'none',
-              backgroundColor: 'background.paper',
-              boxShadow: '4px 0 24px rgba(0, 0, 0, 0.04)',
+              backgroundColor: '#1a1a2e',
+              boxShadow: 'none',
             },
           }}
           open
@@ -394,7 +412,7 @@ const AdminLayout: React.FC = () => {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: '64px',
           minHeight: 'calc(100vh - 64px)',
-          background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)',
+          backgroundColor: '#f5f7fa',
         }}
       >
         <Fade in timeout={600}>

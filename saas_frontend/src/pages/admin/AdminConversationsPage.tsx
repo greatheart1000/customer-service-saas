@@ -27,8 +27,6 @@ import {
   ListItemText,
   ListItemAvatar,
   Divider,
-  Tabs,
-  Tab,
   CircularProgress,
   Alert,
   InputAdornment,
@@ -148,32 +146,35 @@ const AdminConversationsPage: React.FC = () => {
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
+      {/* 页面标题 */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: '#1a1a2e' }}>
           对话管理
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ color: '#6b7280' }}>
           查看和管理所有用户对话记录
         </Typography>
       </Box>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+        <Alert severity="error" sx={{ mb: 3, borderRadius: 3 }} onClose={() => setError(null)}>
           {error}
         </Alert>
       )}
 
-      <Paper elevation={0} sx={{ mb: 3, borderRadius: 3 }}>
-        <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)}>
-          <Tab label="对话列表" />
-          <Tab label="统计分析" />
-        </Tabs>
-      </Paper>
-
       {tabValue === 0 && (
         <>
           {/* 搜索栏 */}
-          <Box sx={{ mb: 3 }}>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              mb: 3,
+              borderRadius: 4,
+              backgroundColor: '#ffffff',
+              border: '1px solid #e5e7eb',
+            }}
+          >
             <TextField
               fullWidth
               placeholder="搜索对话标题或用户ID..."
@@ -182,92 +183,159 @@ const AdminConversationsPage: React.FC = () => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon />
+                    <SearchIcon sx={{ color: '#9ca3af', fontSize: 20 }} />
                   </InputAdornment>
                 ),
               }}
-              sx={{ bgcolor: 'background.paper', borderRadius: 2 }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 3,
+                  backgroundColor: '#f9fafb',
+                  '&:hover': {
+                    backgroundColor: '#f3f4f6',
+                  },
+                  '&.Mui-focused': {
+                    backgroundColor: '#ffffff',
+                  },
+                },
+              }}
             />
-          </Box>
+          </Paper>
 
           {/* 对话列表 */}
           {loading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-              <CircularProgress />
+              <CircularProgress sx={{ color: '#f093fb' }} />
             </Box>
           ) : filteredConversations.length === 0 ? (
-            <Paper sx={{ p: 8, textAlign: 'center', borderRadius: 3 }}>
-              <ChatBubbleOutline sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
-              <Typography variant="h6" color="text.secondary" gutterBottom>
+            <Paper
+              sx={{
+                p: 8,
+                textAlign: 'center',
+                borderRadius: 4,
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb',
+              }}
+            >
+              <ChatBubbleOutline sx={{ fontSize: 64, color: '#9ca3af', mb: 2 }} />
+              <Typography variant="h6" sx={{ color: '#6b7280', mb: 1, fontWeight: 600 }}>
                 暂无对话记录
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: '#9ca3af' }}>
                 {searchQuery ? '没有找到匹配的对话' : '还没有用户开始对话'}
               </Typography>
             </Paper>
           ) : (
-            <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3 }}>
+            <TableContainer
+              component={Paper}
+              elevation={0}
+              sx={{ borderRadius: 4, border: '1px solid #e5e7eb' }}
+            >
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell>对话标题</TableCell>
-                    <TableCell>用户ID</TableCell>
-                    <TableCell>消息数</TableCell>
-                    <TableCell>创建时间</TableCell>
-                    <TableCell>最后更新</TableCell>
-                    <TableCell align="right">操作</TableCell>
+                  <TableRow sx={{ backgroundColor: '#f9fafb' }}>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                      对话标题
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                      用户ID
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                      消息数
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                      创建时间
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                      最后更新
+                    </TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 600, color: '#374151', fontSize: '0.875rem' }}>
+                      操作
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredConversations.map((conv) => (
-                    <TableRow key={conv.id} hover>
+                  {filteredConversations.map((conv, index) => (
+                    <TableRow
+                      key={conv.id}
+                      hover
+                      sx={{
+                        backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9fafb',
+                        '&:hover': {
+                          backgroundColor: '#f3f4f6 !important',
+                        },
+                      }}
+                    >
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <SmartToy fontSize="small" color="action" />
-                          <Typography variant="body2" fontWeight={500}>
+                          <SmartToy fontSize="small" sx={{ color: '#f093fb' }} />
+                          <Typography variant="body2" sx={{ fontWeight: 500, color: '#1a1a2e' }}>
                             {conv.title}
                           </Typography>
                         </Box>
                       </TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Person fontSize="small" color="action" />
-                          <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
+                          <Person fontSize="small" sx={{ color: '#9ca3af' }} />
+                          <Typography variant="body2" sx={{ fontFamily: 'monospace', color: '#6b7280' }}>
                             {conv.user_id.slice(0, 8)}...
                           </Typography>
                         </Box>
                       </TableCell>
                       <TableCell>
-                        <Chip label={conv.message_count} size="small" color="info" />
+                        <Chip
+                          label={conv.message_count}
+                          size="small"
+                          sx={{
+                            borderRadius: 2,
+                            backgroundColor: '#dbeafe',
+                            color: '#1e40af',
+                            fontWeight: 500,
+                            fontSize: '0.75rem',
+                          }}
+                        />
                       </TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                          <CalendarToday fontSize="small" color="action" sx={{ fontSize: 14 }} />
-                          <Typography variant="body2" color="text.secondary">
+                          <CalendarToday fontSize="small" sx={{ color: '#9ca3af', fontSize: 14 }} />
+                          <Typography variant="body2" sx={{ color: '#6b7280' }}>
                             {formatDate(conv.created_at)}
                           </Typography>
                         </Box>
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" sx={{ color: '#6b7280' }}>
                           {formatDate(conv.updated_at)}
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={() => handleViewConversation(conv)}
-                        >
-                          <Visibility />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          color="error"
-                          onClick={() => handleDeleteConversation(conv.id)}
-                        >
-                          <Delete />
-                        </IconButton>
+                        <Box sx={{ display: 'flex', gap: 0.5, justifyContent: 'flex-end' }}>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleViewConversation(conv)}
+                            sx={{
+                              color: '#6b7280',
+                              '&:hover': {
+                                backgroundColor: '#f3f4f6',
+                                color: '#3b82f6',
+                              },
+                            }}
+                          >
+                            <Visibility fontSize="small" />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            onClick={() => handleDeleteConversation(conv.id)}
+                            sx={{
+                              color: '#ef4444',
+                              '&:hover': {
+                                backgroundColor: '#fee2e2',
+                              },
+                            }}
+                          >
+                            <Delete fontSize="small" />
+                          </IconButton>
+                        </Box>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -279,11 +347,19 @@ const AdminConversationsPage: React.FC = () => {
       )}
 
       {tabValue === 1 && (
-        <Paper sx={{ p: 8, textAlign: 'center', borderRadius: 3 }}>
-          <Typography variant="h6" color="text.secondary" gutterBottom>
+        <Paper
+          sx={{
+            p: 8,
+            textAlign: 'center',
+            borderRadius: 4,
+            backgroundColor: '#ffffff',
+            border: '1px solid #e5e7eb',
+          }}
+        >
+          <Typography variant="h6" sx={{ color: '#6b7280', mb: 1, fontWeight: 600 }}>
             统计分析功能
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: '#9ca3af' }}>
             对话统计、活跃用户分析等功能即将推出
           </Typography>
         </Paper>
@@ -295,23 +371,29 @@ const AdminConversationsPage: React.FC = () => {
         onClose={() => setViewDialogOpen(false)}
         maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 4,
+            border: '1px solid #e5e7eb',
+          },
+        }}
       >
-        <DialogTitle>
-          <Typography variant="h6">
+        <DialogTitle sx={{ pb: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, color: '#1a1a2e' }}>
             {selectedConversation?.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: '#6b7280' }}>
             对话ID: {selectedConversation?.id}
           </Typography>
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers sx={{ borderColor: '#f3f4f6' }}>
           {messagesLoading ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-              <CircularProgress />
+              <CircularProgress sx={{ color: '#f093fb' }} />
             </Box>
           ) : messages.length === 0 ? (
             <Box sx={{ textAlign: 'center', py: 4 }}>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" sx={{ color: '#6b7280' }}>
                 暂无消息记录
               </Typography>
             </Box>
@@ -323,7 +405,12 @@ const AdminConversationsPage: React.FC = () => {
                     <ListItemAvatar>
                       <Avatar
                         sx={{
-                          bgcolor: msg.role === 'user' ? '#f093fb' : '#4facfe',
+                          bgcolor: msg.role === 'user'
+                            ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                            : 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                          boxShadow: msg.role === 'user'
+                            ? '0 4px 12px rgba(240, 147, 251, 0.3)'
+                            : '0 4px 12px rgba(79, 172, 254, 0.3)',
                         }}
                       >
                         {msg.role === 'user' ? <Person /> : <SmartToy />}
@@ -332,10 +419,10 @@ const AdminConversationsPage: React.FC = () => {
                     <ListItemText
                       primary={
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Typography variant="subtitle2" component="span">
+                          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: '#1a1a2e' }}>
                             {msg.role === 'user' ? '用户' : 'AI助手'}
                           </Typography>
-                          <Typography variant="caption" color="text.secondary">
+                          <Typography variant="caption" sx={{ color: '#9ca3af' }}>
                             {formatDate(msg.created_at)}
                           </Typography>
                         </Box>
@@ -343,13 +430,14 @@ const AdminConversationsPage: React.FC = () => {
                       secondary={
                         <Typography
                           variant="body2"
-                          color="text.primary"
                           sx={{
                             mt: 1,
                             p: 1.5,
-                            bgcolor: msg.role === 'user' ? 'grey.100' : 'primary.50',
+                            bgcolor: msg.role === 'user' ? '#fdf2f8' : '#eff6ff',
                             borderRadius: 2,
                             display: 'block',
+                            color: '#374151',
+                            lineHeight: 1.6,
                           }}
                         >
                           {msg.content}
@@ -363,8 +451,17 @@ const AdminConversationsPage: React.FC = () => {
             </List>
           )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setViewDialogOpen(false)}>关闭</Button>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <Button
+            onClick={() => setViewDialogOpen(false)}
+            sx={{
+              color: '#6b7280',
+              fontWeight: 500,
+              textTransform: 'none',
+            }}
+          >
+            关闭
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>

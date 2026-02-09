@@ -32,6 +32,8 @@ class UserInDB(UserBase):
     id: UUID
     is_active: bool
     is_verified: bool
+    is_admin: bool = False  # 平台管理员
+    is_org_admin: bool = False  # 组织管理员
     avatar_url: Optional[str] = None
     wechat_openid: Optional[str] = None
     created_at: datetime

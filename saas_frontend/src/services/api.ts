@@ -137,4 +137,34 @@ export const usageAPI = {
     }),
 };
 
+/**
+ * 通用请求方法 - 用于向后兼容
+ */
+export async function request<T = any>(
+  endpoint: string,
+  options: {
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+    data?: any;
+    params?: any;
+  } = {}
+): Promise<T> {
+  const { method = 'GET', data, params } = options;
+
+  const config: any = {
+    method,
+    url: endpoint,
+  };
+
+  if (data) {
+    config.data = data;
+  }
+
+  if (params) {
+    config.params = params;
+  }
+
+  const response = await apiClient.request(config);
+  return response.data;
+}
+
 export default apiClient;

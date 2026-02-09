@@ -59,3 +59,18 @@ Thumbs.db
 
 # Docker
 docker-compose.override.yml
+
+# 前端构建产物
+saas_frontend/dist/
+saas_frontend/.vite/
+
+# 后端虚拟环境
+saas_backend/.venv/
+saas_backend/venv/
+
+# Alembic
+*.pyc
+__pycache__/
+
+# Claude Code
+.claude/

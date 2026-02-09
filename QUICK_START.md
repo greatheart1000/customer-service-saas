@@ -1,4 +1,26 @@
-# 🚀 快速开始
+# 🚀 快速开始 - 智能客服 SaaS 系统
+
+## ✨ 最新功能 (v1.0)
+
+### ✅ 简化版 RBAC 权限系统
+- **3 种角色**：平台管理员、组织管理员、普通用户
+- **路由守卫**：前端和后端双重权限验证
+- **数据库迁移**：`001_add_user_roles.py`
+
+### ✅ Coze API 真实 AI 对话
+- **流式响应**：SSE 实时推送 AI 回复
+- **多机器人支持**：可切换不同机器人
+- **消息历史**：自动保存对话记录
+- **优雅降级**：API 失败时的备用方案
+
+### ✅ 完整管理端
+- **仪表板**：数据统计和图表
+- **用户管理**：用户列表、角色管理
+- **机器人管理**：创建和管理 Coze 机器人
+- **知识库管理**：文档管理和导入
+- **对话管理**：查看所有对话记录
+
+---
 
 ## 一键启动
 
@@ -101,10 +123,24 @@ stop.bat
    \q
    ```
 
-3. **运行数据库迁移**（可选）
+3. **运行数据库迁移**（必需）
    ```bash
    cd saas_backend
    alembic upgrade head
+   ```
+
+   这将创建：
+   - 用户角色字段 (`is_admin`, `is_org_admin`)
+   - 消息表 (`messages`)
+
+4. **创建管理员账户**
+   ```bash
+   python create_admin.py
+   ```
+
+   或直接在数据库中设置：
+   ```sql
+   UPDATE users SET is_admin=true, is_org_admin=true WHERE email='your@email.com';
    ```
 
 ## 测试登录
@@ -162,6 +198,133 @@ tail -f frontend.log
 - 配置微信登录：在微信开放平台申请应用
 - 配置支付功能：配置微信支付或支付宝
 - 生产部署：查看 [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+---
+
+## 🎯 使用指南
+
+### 用户端功能
+
+1. **聊天对话** (`/chat`)
+   - 实时流式 AI 对话
+   - 支持多机器人切换
+   - 自动保存历史记录
+
+2. **历史记录** (`/history`)
+   - 查看所有对话记录
+   - 搜索和筛选
+
+3. **个人中心** (`/profile`)
+   - 查看个人信息
+   - 统计数据
+   - 订阅状态
+
+### 管理端功能 (`/admin/*`)
+
+1. **仪表板** (`/admin/dashboard`)
+   - 用户统计
+   - 对话统计
+   - 收入统计
+
+2. **用户管理** (`/admin/users`)
+   - 用户列表
+   - 角色管理
+   - 权限设置
+
+3. **机器人管理** (`/admin/bots`)
+   - 创建 Coze 机器人
+   - 配置欢迎消息
+   - 启用/停用机器人
+
+4. **知识库管理** (`/admin/knowledge`)
+   - 创建知识库
+   - 添加文档
+   - 导入记录
+
+5. **对话管理** (`/admin/conversations`)
+   - 查看所有对话
+   - 消息详情
+   - 导出记录
+
+### 权限说明
+
+| 角色 | 用户端 | 管理端 | 说明 |
+|------|--------|--------|------|
+| **平台管理员** | ✅ | ✅ | 全部功能 |
+| **组织管理员** | ✅ | ✅ | 管理本组织 |
+| **普通用户** | ✅ | ❌ | 仅聊天功能 |
+
+---
+
+## 🔧 Coze API 配置
+
+系统已集成 Coze API，配置文件位于 `.env`：
+
+```env
+COZE_API_TOKEN=pat_fHoypKwkf2V9XkOJdrsZlqrImJhPKXMRRb9gYoGptbPtyOASQtJpoPlnv5Ry4J4m
+COZE_API_BASE=https://api.coze.cn
+COZE_WORKSPACE_ID=7402890147165339699
+COZE_BOT_ID=7482601981945839670
+```
+
+### 获取 Bot ID
+
+1. 访问 [Coze 开发平台](https://www.coze.cn)
+2. 创建或选择现有机器人
+3. 复制 Bot ID
+4. 在管理端 `/admin/bots` 添加机器人
+
+---
+
+## 📝 开发说明
+
+### 前端 API 服务
+
+```typescript
+import { getBots, sendMessageStream } from './services/chat';
+
+// 获取机器人列表
+const bots = await getBots();
+
+// 发送流式消息
+await sendMessageStream(
+  { bot_id: 'xxx', message: '你好' },
+  onChunk,
+  onError,
+  onComplete
+);
+```
+
+### 后端 API 端点
+
+- **认证**：`/api/v1/auth/*`
+- **用户**：`/api/v1/auth/me`
+- **聊天**：`/api/v1/chat/chat` (非流式), `/api/v1/chat/chat/stream` (流式)
+- **机器人**：`/api/v1/bots/*`
+- **对话**：`/api/v1/conversations/*`
+- **管理端**：`/api/v1/admin/*`
+
+---
+
+## 🐛 常见问题
+
+### Q: 登录后无法访问管理端？
+**A**: 设置用户权限：
+```sql
+UPDATE users SET is_admin=true WHERE email='your@email.com';
+```
+
+### Q: 聊天没有响应？
+**A**: 检查：
+1. `.env` 中的 `COZE_API_TOKEN` 是否正确
+2. 机器人是否已创建且 `is_active=True`
+3. 查看后端日志
+
+### Q: 流式聊天中断？
+**A**:
+1. 检查网络连接
+2. 确认防火墙允许 SSE
+3. 查看浏览器控制台
 
 ---
 

@@ -3,6 +3,7 @@
  */
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import authService from '../../services/auth';
 import {
   Box,
   Container,
@@ -64,29 +65,17 @@ const LoginPage: React.FC = () => {
     setEmailLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append('username', email);
-      formData.append('password', password);
+      await authService.login({ username: email, password });
 
-      const response = await fetch('http://localhost:8000/api/v1/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.refresh_token);
-        navigate('/dashboard');
+      // 根据用户角色跳转到不同页面
+      const user = authService.getUserFromStorage();
+      if (user?.is_admin || user?.is_org_admin) {
+        navigate('/admin/dashboard');
       } else {
-        setEmailError(data.detail || '登录失败');
+        navigate('/chat');
       }
-    } catch (err) {
-      setEmailError('网络错误，请稍后重试');
+    } catch (err: any) {
+      setEmailError(err.message || '登录失败');
     } finally {
       setEmailLoading(false);
     }

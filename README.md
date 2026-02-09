@@ -1,168 +1,184 @@
-# 智能客服系统 - 多功能版
+# 🤖 智能客服 SaaS 平台
 
-支持图像识别、语音交互、工作流、对话管理、机器人管理和音频处理的全方位客户服务平台。
+一个功能完整的智能客服SaaS系统，支持多租户、用户管理、知识库管理和AI对话功能。
 
-## 在WSL中运行 (Windows Subsystem for Linux)
+## ✨ 主要功能
 
-该系统完全支持在WSL环境中运行。有关详细的设置说明，请参阅 [WSL_SETUP.md](WSL_SETUP.md) 文件。
+### 🎯 用户端功能
+- **实时AI对话**：基于 Coze API 的智能对话
+- **流式响应**：SSE 实时推送 AI 回复
+- **多机器人支持**：可切换不同AI机器人
+- **对话历史**：自动保存和管理对话记录
 
-## 功能特性
+### 👥 管理端功能
+- **仪表板**：数据统计和图表展示
+- **用户管理**：用户列表、角色管理、权限设置
+- **机器人管理**：创建和管理 Coze AI机器人
+- **知识库管理**：创建知识库、上传和管理文档
+- **对话管理**：查看所有用户对话和消息记录
+- **订阅管理**：计划管理和订阅升级
 
-1. **图像识别服务**
-   - 图片内容描述
-   - 图片文字提取
-   - 自定义问题询问
+### 🔐 权限系统
+- **平台管理员**：全部功能访问权限
+- **组织管理员**：管理本组织和用户
+- **普通用户**：仅聊天功能
 
-2. **语音交互服务**
-   - 实时语音输入
-   - 语音合成输出
-   - 流式对话体验
-   - 语音转文本转录
-   - 一对一音频聊天
+## 🚀 快速开始
 
-3. **文本聊天服务**
-   - 传统文本对话模式
-   - 流式聊天
-   - 非流式聊天
-   - 本地插件支持
-
-4. **工作流服务**
-   - 流式工作流运行
-   - 非流式工作流运行
-   - 异步工作流运行
-   - 工作流聊天
-   - 工作流版本管理
-
-5. **对话管理服务**
-   - 对话创建和检索
-   - 消息管理
-   - 对话列表
-   - 对话清理
-
-6. **机器人管理服务**
-   - 机器人创建和更新
-   - 机器人发布和取消发布
-   - 机器人测试
-   - 机器人列表
-
-7. **音频HTTP服务**
-   - 文本转语音
-   - 声音管理
-   - 批量音频生成
-
-## 环境要求
+### 环境要求
 
 - Python 3.8+
-- Coze API Token
-- Coze Bot ID
-- Coze Workspace ID (用于数据集和机器人功能)
-- 麦克风和扬声器（用于语音功能）
+- Node.js 16+
+- PostgreSQL 12+
+- Redis (可选)
 
-## 安装依赖
-
-```bash
-pip install -r requirements.txt
-```
-
-## 环境变量配置
-
-在运行系统前，需要设置以下环境变量：
+### 一键启动
 
 ```bash
-export COZE_API_TOKEN="your_coze_api_token"
-export COZE_BOT_ID="your_bot_id"
-export COZE_WORKSPACE_ID="your_workspace_id"
-# 可选，API基础URL，默认为 https://api.coze.cn
-export COZE_API_BASE="https://api.coze.com"
+# 克隆项目
+git clone https://github.com/greatheart1000/customer-service-saas.git
+cd customer-service-saas
+
+# 启动所有服务
+./start.sh
+
+# 或手动启动
+cd saas_backend && .venv/bin/python -m app.main  # 后端
+cd saas_frontend && npm run dev                    # 前端
 ```
 
-或者创建一个 `.env` 文件在 `customer_service` 目录中：
+### 访问地址
+
+| 服务 | 地址 |
+|------|------|
+| 🎨 前端界面 | http://localhost:3000 |
+| 🔧 后端 API | http://localhost:8000 |
+| 📚 API 文档 | http://localhost:8000/docs |
+| 📖 ReDoc | http://localhost:8000/redoc |
+
+### 默认管理员账户
+
+```
+邮箱：admin@example.com
+密码：Admin123456
+```
+
+## 📖 详细文档
+
+- **[快速开始指南](QUICK_START.md)** - 详细的安装和使用说明
+- **[部署文档](DEPLOYMENT.md)** - 生产环境部署指南
+
+## 🛠️ 技术栈
+
+### 后端
+- **框架**：FastAPI (Python 3.8+)
+- **数据库**：PostgreSQL + SQLAlchemy ORM
+- **认证**：JWT (Access Token + Refresh Token)
+- **AI集成**：Coze API v3
+- **数据迁移**：Alembic
+
+### 前端
+- **框架**：React 18 + TypeScript
+- **UI库**：Material-UI (MUI) v5
+- **路由**：React Router v6
+- **状态管理**：Redux Toolkit
+- **构建工具**：Vite
+
+## 📁 项目结构
+
+```
+customer-service-saas/
+├── saas_backend/          # FastAPI 后端
+│   ├── app/              # 应用代码
+│   │   ├── api/          # API 路由
+│   │   ├── core/         # 核心配置
+│   │   ├── db/           # 数据库模型
+│   │   ├── models/       # SQLAlchemy 模型
+│   │   ├── schemas/      # Pydantic schemas
+│   │   └── services/     # 业务逻辑
+│   ├── alembic/          # 数据库迁移
+│   ├── tests/            # 测试文件
+│   └── requirements.txt  # Python 依赖
+│
+├── saas_frontend/         # React 前端
+│   ├── src/
+│   │   ├── components/   # React 组件
+│   │   ├── pages/        # 页面组件
+│   │   ├── services/     # API 服务
+│   │   ├── store/        # Redux store
+│   │   └── App.tsx       # 应用入口
+│   └── package.json      # Node 依赖
+│
+├── start.sh              # 一键启动脚本
+├── stop.sh               # 一键停止脚本
+├── docker-compose.yml    # Docker 编排
+├── DEPLOYMENT.md         # 部署文档
+└── QUICK_START.md        # 快速开始指南
+```
+
+## 🔧 配置说明
+
+### 环境变量
+
+复制 `.env.example` 到 `.env` 并配置：
 
 ```bash
-# 复制示例文件并修改
- cp .env.example .env
- 
-# 然后编辑 .env 文件填入你的实际值
- nano .env
+cp .env.example .env
 ```
 
-示例 `.env` 文件内容：
+主要配置项：
+- `DATABASE_URL`: PostgreSQL 数据库连接
+- `SECRET_KEY`: JWT 密钥
+- `COZE_API_TOKEN`: Coze API Token
+- `COZE_API_BASE`: Coze API 基础URL
+
+### 数据库迁移
 
 ```bash
-# .env file
-COZE_API_TOKEN=your_coze_api_token
-COZE_BOT_ID=your_bot_id
-COZE_WORKSPACE_ID=your_workspace_id
-COZE_API_BASE=https://api.coze.com
+cd saas_backend
+alembic upgrade head
 ```
 
-## 运行系统
+## 📝 开发说明
 
-### 方法1：直接运行
+### 添加新的API端点
+
+1. 在 `app/schemas/` 中定义 Pydantic 模型
+2. 在 `app/models/` 中定义数据库模型
+3. 在 `app/api/v1/endpoints/` 中创建路由
+4. 在 `app/api/v1/__init__.py` 中注册路由
+
+### 添加新的前端页面
+
+1. 在 `src/pages/` 中创建页面组件
+2. 在 `src/services/` 中创建API服务
+3. 在 `src/App.tsx` 中添加路由
+
+## 🧪 测试
 
 ```bash
-python -m customer_service.main
+# 后端测试
+cd saas_backend
+pytest
+
+# 前端测试
+cd saas_frontend
+npm test
 ```
 
-### 方法2：使用提供的脚本 (WSL/Linux)
+## 📄 许可证
 
-```bash
-# 运行控制台界面
-./run_console.sh
+MIT License
 
-# 运行前端界面
-./run_frontend.sh
-```
+## 🤝 贡献
 
-### 方法3：在WSL中运行
+欢迎提交 Pull Request！
 
-```bash
-# 在WSL中导航到项目目录
-cd /mnt/d/project/coze-py/customer_service
+## 📧 联系方式
 
-# 运行主应用
-python3 main.py
+- GitHub: [@greatheart1000](https://github.com/greatheart1000)
+- Email: greatheart1000@example.com
 
-# 或者运行前端 (在另一个终端)
-cd frontend
-npm run dev
-```
+---
 
-## 使用说明
-
-1. **图像识别服务**
-   - 选择菜单中的图像识别服务
-   - 输入图片文件路径
-   - 选择相应的功能（描述、文字提取或自定义问题）
-
-2. **语音交互服务**
-   - 选择菜单中的语音交互服务
-   - 按提示开始和结束录音
-   - 系统会自动播放回复
-
-3. **文本聊天服务**
-   - 选择菜单中的文本聊天服务
-   - 直接输入文本进行对话
-   - 输入 'quit' 或 'exit' 返回主菜单
-
-4. **工作流服务**
-   - 选择菜单中的工作流服务
-   - 根据需要选择不同的工作流操作
-
-5. **对话管理服务**
-   - 选择菜单中的对话管理服务
-   - 进行对话的创建、查看、修改等操作
-
-6. **机器人管理服务**
-   - 选择菜单中的机器人管理服务
-   - 进行机器人的创建、更新、发布等操作
-
-7. **音频HTTP服务**
-   - 选择菜单中的音频HTTP服务
-   - 进行文本转语音等相关操作
-
-## 注意事项
-
-- 使用语音功能需要安装 PyAudio，可能需要额外的系统依赖
-- 确保网络连接正常以访问 Coze API
-- 图片格式支持常见的 JPG/PNG 等格式
+⭐ 如果这个项目对你有帮助，请给个 Star！

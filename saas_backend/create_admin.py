@@ -39,6 +39,8 @@ def create_admin_user(
             password_hash=get_password_hash(password),
             is_active=True,
             is_verified=True,  # 管理员账号直接验证
+            is_admin=True,  # 平台管理员
+            is_org_admin=True,  # 组织管理员
         )
 
         db.add(user)

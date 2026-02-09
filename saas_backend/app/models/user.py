@@ -23,6 +23,8 @@ class User(Base):
     avatar_url = Column(String(500), nullable=True)
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
+    is_admin = Column(Boolean, default=False)  # 平台管理员
+    is_org_admin = Column(Boolean, default=False)  # 组织管理员
     wechat_openid = Column(String(100), unique=True, nullable=True, index=True)
     wechat_unionid = Column(String(100), unique=True, nullable=True)
 

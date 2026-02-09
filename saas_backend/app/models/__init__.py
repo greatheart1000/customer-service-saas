@@ -9,6 +9,7 @@ from app.models.usage import UsageRecord
 from app.models.order import Order
 from app.models.bot import Bot
 from app.models.conversation import Conversation
+from app.models.message import Message
 from app.models.apikey import APIKey
 from app.models.verification_code import VerificationCode
 from app.models.wechat_login_session import WeChatLoginSession
@@ -22,6 +23,7 @@ __all__ = [
     "Order",
     "Bot",
     "Conversation",
+    "Message",
     "APIKey",
     "VerificationCode",
     "WeChatLoginSession",
